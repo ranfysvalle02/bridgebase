@@ -1,0 +1,28 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: testdb
+    ports:
+      - "5432:5432"
+
+  mongodb:
+    image: mongodb/mongodb-atlas-local
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+
+  adapter:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: postgres-mongo-adapter
+    ports:
+      - "5000:5000"
+    depends_on:
+      - postgres
+      - mongodb
