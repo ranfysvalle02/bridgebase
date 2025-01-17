@@ -2,11 +2,6 @@
 
 ---
 
-**MongoDB as the “Man in the Middle”**  
-Ever hear someone say, “Oh, Mongo’s fine, but don’t try to treat it like a SQL database—it’ll be slow!”? This project puts that claim to the test by taking an SQL-like query, parsing it in Python, running that translated query in MongoDB, and comparing performance with a real Postgres query. The surprising result is that Mongo remains quite competitive—even when acting as a “man in the middle,” translating SQL to a Mongo `.find()` behind the scenes.
-
----
-
 ### The Experiment
 A small Flask app is set up to take in a query like `SELECT * FROM users`, call a Ray actor, and fire off two tasks in parallel:
 
@@ -53,9 +48,6 @@ Mongo remains surprisingly competitive. It’s being forced to parse and transla
 ### Why It Matters
 - **Mongo Overhead Isn’t Extreme**  
   Converting SQL to a Mongo query does add some processing time, but the measured gap is relatively small.
-
-- **Parallel Execution**  
-  Ray tasks handle both queries at once. The total time is roughly the duration of the slower query plus a little overhead, which is beneficial when both databases need to be queried for the same request.
 
 - **Real-World Impact**  
   A few hundred milliseconds difference is often acceptable in practical apps—especially with caching or indexing. If there’s a desire to maintain a consistent SQL interface for multiple data stores, Mongo can still deliver decent performance in this setup.
